@@ -25,6 +25,24 @@ public class PrefixTree {
      */
     public void add(String word){
         //TODO: complete me
+        TreeNode current = root;
+        for (int i = 0; i < word.length(); i++) {
+            if (!current.children.containsKey(word.charAt(i))) {
+                TreeNode child = new TreeNode();
+                current.children.put(word.charAt(i), child);
+                current = current.children.get(word.charAt(i));
+            } else {
+                current = current.children.get(word.charAt(i));
+            }
+            if (i == word.length() - 1) {
+                if (current.isWord == true) {
+                    size = size;
+                } else {
+                    current.isWord = true;
+                    size++;
+                }
+            }
+        }
     }
 
     /**
