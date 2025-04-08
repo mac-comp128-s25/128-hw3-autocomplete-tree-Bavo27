@@ -24,7 +24,6 @@ public class PrefixTree {
      * @param word
      */
     public void add(String word){
-        //TODO: complete me
         TreeNode current = root;
         for (int i = 0; i < word.length(); i++) {
             if (!current.children.containsKey(word.charAt(i))) {
@@ -50,8 +49,16 @@ public class PrefixTree {
      * @param word
      * @return true if contained in the tree.
      */
-    public boolean contains(String word){
-        //TODO: complete me
+    public boolean contains(String word) {
+        TreeNode current = root;
+        for (int i = 0; i < word.length(); i++) {
+            if (current.children.containsKey(word.charAt(i))) {
+                current = current.children.get(word.charAt(i));
+            }
+            if (i == word.length() - 1 && current.isWord) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -63,7 +70,31 @@ public class PrefixTree {
      */
     public ArrayList<String> getWordsForPrefix(String prefix){
         //TODO: complete me
-        return null;
+        ArrayList<String> wordList = new ArrayList<>();
+        TreeNode current = root;
+        for (int i = 0; i < prefix.length(); i++) {
+            if (current.children.containsKey(prefix.charAt(i))){
+                current = current.children.get(prefix.charAt(i));
+            }
+            if (current.isWord && i == prefix.length() - 1){
+                wordList.add(prefix);
+            }
+        }
+        for (Character ch : current.children.keySet()) {
+            String restOfWord = "";
+            current = current.children.get(ch);
+            restOfWord = restOfWord + ch;
+            while (!current.isWord) {
+                current = current.children.get(ch);
+                restOfWord = restOfWord + current;
+            }
+            wordList.add(prefix + restOfWord);
+        }
+        return wordList;
+    }
+
+    public String getPaths(TreeNode current, String prefix, ) {
+        
     }
 
     /**
