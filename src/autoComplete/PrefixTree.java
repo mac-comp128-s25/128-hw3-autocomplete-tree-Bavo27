@@ -75,26 +75,22 @@ public class PrefixTree {
         for (int i = 0; i < prefix.length(); i++) {
             if (current.children.containsKey(prefix.charAt(i))){
                 current = current.children.get(prefix.charAt(i));
-            }
-            if (current.isWord && i == prefix.length() - 1){
-                wordList.add(prefix);
+            } else {
+                return wordList;
             }
         }
-        for (Character ch : current.children.keySet()) {
-            String restOfWord = "";
-            current = current.children.get(ch);
-            restOfWord = restOfWord + ch;
-            while (!current.isWord) {
-                current = current.children.get(ch);
-                restOfWord = restOfWord + current;
-            }
-            wordList.add(prefix + restOfWord);
-        }
+        getWords(current, prefix, wordList);
+        System.out.println(wordList);
         return wordList;
     }
 
-    public String getPaths(TreeNode current, String prefix, ) {
-        
+    public void getWords(TreeNode current, String prefix, ArrayList<String> wordList) {
+        if (current.isWord) {
+            wordList.add(prefix);
+        }
+        for (Character ch : current.children.keySet()) {
+            getWords(current.children.get(ch), prefix + ch, wordList);
+        }
     }
 
     /**
