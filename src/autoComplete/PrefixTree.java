@@ -24,7 +24,24 @@ public class PrefixTree {
      * @param word
      */
     public void add(String word){
-        //TODO: complete me
+        TreeNode current = root;
+        for (int i = 0; i < word.length(); i++) {
+            if (!current.children.containsKey(word.charAt(i))) {
+                TreeNode child = new TreeNode();
+                current.children.put(word.charAt(i), child);
+                current = current.children.get(word.charAt(i));
+            } else {
+                current = current.children.get(word.charAt(i));
+            }
+            if (i == word.length() - 1) {
+                if (current.isWord == true) {
+                    size = size;
+                } else {
+                    current.isWord = true;
+                    size++;
+                }
+            }
+        }
     }
 
     /**
@@ -32,8 +49,16 @@ public class PrefixTree {
      * @param word
      * @return true if contained in the tree.
      */
-    public boolean contains(String word){
-        //TODO: complete me
+    public boolean contains(String word) {
+        TreeNode current = root;
+        for (int i = 0; i < word.length(); i++) {
+            if (current.children.containsKey(word.charAt(i))) {
+                current = current.children.get(word.charAt(i));
+            }
+            if (i == word.length() - 1 && current.isWord) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -44,8 +69,33 @@ public class PrefixTree {
      * @return list of words with prefix
      */
     public ArrayList<String> getWordsForPrefix(String prefix){
-        //TODO: complete me
-        return null;
+        ArrayList<String> wordList = new ArrayList<>();
+        TreeNode current = root;
+        for (int i = 0; i < prefix.length(); i++) {
+            if (current.children.containsKey(prefix.charAt(i))){
+                current = current.children.get(prefix.charAt(i));
+            } else {
+                return wordList;
+            }
+        }
+        getWords(current, prefix, wordList);
+        return wordList;
+    }
+
+    /**
+     * Checks if the prefix is a word and then recurses through the children of each node until it gets to null. While recursing if it gets to a word
+     * it adds it to the wordList.
+     * @param current
+     * @param prefix
+     * @param wordList
+     */
+    public void getWords(TreeNode current, String prefix, ArrayList<String> wordList) {
+        if (current.isWord) {
+            wordList.add(prefix);
+        }
+        for (Character ch : current.children.keySet()) {
+            getWords(current.children.get(ch), prefix + ch, wordList);
+        }
     }
 
     /**
